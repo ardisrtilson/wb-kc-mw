@@ -6,9 +6,8 @@ var qs = require('qs');
 
 router.get('/', function(req, res, next) {
     getToken().then(response => {
-        res.send('fsaf')
         const decrypted = jwt_decode(response.data.access_token)
-        console.log(decrypted)
+        res.send(decrypted)
     })
 });
 
