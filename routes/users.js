@@ -71,7 +71,7 @@ async function createUser(token, stats) {
   
   let data = {"firstName":`${stats.firstName}`,"lastName":`${stats.lastName}`, "email":`${stats.email}`, "enabled":"true", "username":`${stats.username}`}
 
-  let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/demo-realm/users'
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/${stats.realm}/users`
 
   await axios.post(url, JSON.stringify(data), config).catch(error => console.log(error))
   
