@@ -14,7 +14,6 @@ router.get('/', function(req, res, next) {
 router.post('/', function requestHandler(req, res) {
   console.log(req.body)
   res.send(req.body)
-  console.log("It's happening")
   getToken().then(res => createUser(res, req.body))
 });
 
@@ -25,10 +24,9 @@ async function getToken() {
     }
   
   let data = {
-    'grant_type': "password",
+    'grant_type': "client_credentials",
     'client_id': "admin-cli",
-    'username': "admin",
-    'password': "44qxQPtkcA"
+    'client_secret': "0f6b574b-821e-47fe-ad58-aa8d6fcf9fbe"
   }
 
   let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/master/protocol/openid-connect/token'
