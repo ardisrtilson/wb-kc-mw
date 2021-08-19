@@ -20,13 +20,12 @@ router.put('/', function requestHandler(req, res) {
 
   let config = {
     headers: {"Content-Type": "application/x-www-form-urlencoded"}
-    }
+  }
   
   let data = {
-    'grant_type': "password",
+    'grant_type': "client_credentials",
     'client_id': "admin-cli",
-    'username': "rabbit",
-    'password': "minty"
+    'client_secret': "16e6581f-6bad-44b5-b0dc-012d2c77bbc5"
   }
 
   let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/master/protocol/openid-connect/token'
