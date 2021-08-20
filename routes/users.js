@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function requestHandler(req, res) {
-  console.log(req.body)
+  console.log(req.body.id)
   res.send(req.body)
   getToken().then(res => createUser(res, req.body))
 });
@@ -66,9 +66,20 @@ async function createUser(token, stats) {
     }
   }
   
-  let data = {"firstName":`${stats.firstName}`,"lastName":`${stats.lastName}`, "email":`${stats.email}`, "enabled":"true", "username":`${stats.username}`}
+  let data = {firstName:`${stats.firstName}`,
+              lastName:`${stats.lastName}`, 
+              email:`${stats.email}`, 
+              enabled:true, 
+              username:`${stats.username}}`, 
+              credentials: [
+  {
+        type: "password",
+        temporary: false,
+        value: "mintee"
+  }
+]}
 
-  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/${stats.realm}/users`
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/demo-realm/users`
 
   await axios.post(url, JSON.stringify(data), config).catch(error => console.log(error))
   
