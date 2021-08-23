@@ -8,7 +8,7 @@ router.put('/', function requestHandler(req, res) {
   getToken()
     .then(response => getByEmail(response, temp)
       .then(response => changePassword(response.token.data.access_token, response.res.data[0].id)
-        .then(response => console.log(response))
+        // .then(response => console.log("here?"))
       ))
 
   res.send(req.body)
@@ -23,13 +23,13 @@ async function getToken() {
   let data = {
     'grant_type': "client_credentials",
     'client_id': "admin-cli",
-    'client_secret': "16e6581f-6bad-44b5-b0dc-012d2c77bbc5"
+    'client_secret': "7b80df1a-9699-439d-81a7-f1a3f000db24"
   }
 
-  let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/demo-realm/protocol/openid-connect/token'
+  let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/workbay/protocol/openid-connect/token'
 
   let res = await axios.post(url, qs.stringify(data), config
-  ).catch(error => console.log(error))
+  ).catch(error => console.log("1"))
 
   return res
 }
@@ -43,9 +43,9 @@ async function getByEmail(token, email) {
     }
   }
 
-  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/demo-realm/users?search=${email}`
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users?search=${email}`
 
-  let res = await axios.get(url, config).catch(error => console.log(error))
+  let res = await axios.get(url, config).catch(error => console.log("2"))
 
   let info = {
     "res": res,
@@ -56,7 +56,6 @@ async function getByEmail(token, email) {
 }
 
 async function changePassword(token, id) {
-  console.log(token)
   let config = {
     headers: {
       "Content-Type": "application/json",
@@ -65,16 +64,12 @@ async function changePassword(token, id) {
   }
 
   let data = {
-    credentials: [
-      {
         type: "password",
         temporary: false,
-        value: "mintee"
-      }
-    ]
+        value: "mint"
   }
 
-  let url = `/auth/admin/realms/demo-realm/users/${id}/reset-password`
+  let url = `/auth/admin/realms/workbay/users/${id}/reset-password`
 
   let res = await axios.put(url, JSON.stringify(data), config).catch(error => console.log(error))
 

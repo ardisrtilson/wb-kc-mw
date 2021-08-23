@@ -26,10 +26,10 @@ async function getToken() {
   let data = {
     'grant_type': "client_credentials",
     'client_id': "admin-cli",
-    'client_secret': "16e6581f-6bad-44b5-b0dc-012d2c77bbc5"
+    'client_secret': "7b80df1a-9699-439d-81a7-f1a3f000db24"
   }
 
-  let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/demo-realm/protocol/openid-connect/token'
+  let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/workbay/protocol/openid-connect/token'
 
   let res = await axios.post(url, qs.stringify(data), config
   ).catch(error => console.log(error))
@@ -70,7 +70,7 @@ async function createUser(token, stats) {
               lastName:`${stats.lastName}`, 
               email:`${stats.email}`, 
               enabled:true, 
-              username:`${stats.username}}`, 
+              username:`${stats.username}`, 
               credentials: [
   {
         type: "password",
@@ -79,7 +79,7 @@ async function createUser(token, stats) {
   }
 ]}
 
-  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/demo-realm/users`
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users`
 
   await axios.post(url, JSON.stringify(data), config).catch(error => console.log(error))
   
