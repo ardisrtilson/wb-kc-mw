@@ -4,13 +4,11 @@ var axios = require('axios')
 var qs = require('qs');
 
 router.put('/', function requestHandler(req, res) {
-  var temp = "a.redford.tilson@gmail.com"
+  var email = req.body.email
   getToken()
-    .then(response => getByEmail(response, temp)
-      .then(response => changePassword(response.token.data.access_token, response.res.data[0].id)
-        // .then(response => console.log("here?"))
+    .then(response => getByEmail(response, email)
+      .then(response => changePassword(response.token.data.access_token, response.res.data[0].id, req.body.value)
       ))
-
   res.send(req.body)
 });
 
@@ -55,7 +53,7 @@ async function getByEmail(token, email) {
   return info
 }
 
-async function changePassword(token, id) {
+async function changePassword(token, id, password) {
   let config = {
     headers: {
       "Content-Type": "application/json",
@@ -66,10 +64,10 @@ async function changePassword(token, id) {
   let data = {
         type: "password",
         temporary: false,
-        value: "mint"
+        value: password
   }
 
-  let url = `/auth/admin/realms/workbay/users/${id}/reset-password`
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users/${id}/reset-password`
 
   let res = await axios.put(url, JSON.stringify(data), config).catch(error => console.log(error))
 
