@@ -6,15 +6,11 @@ const qs = require('qs');
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
 router.post('/', function requestHandler(req, res) {
-  console.log(req.body.id)
+  getToken().then(response => createUser(response, req.body))
+  .then(response => getByEmail(response.token.data.access_token, response.stats.email, response.stats))
+  .then(response => changePassword(response.token, response.info.res.data.id, response.body.password))
   res.send(req.body)
-  getToken().then(res => createUser(res, req.body))
 });
 
 async function getToken() {
@@ -32,7 +28,7 @@ async function getToken() {
   let url = 'https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/realms/workbay/protocol/openid-connect/token'
 
   let res = await axios.post(url, qs.stringify(data), config
-  ).catch(error => console.log(error))
+  ).catch(error => console.log("1"))
   
   return res
 }
@@ -55,14 +51,56 @@ async function createUser(token, stats) {
   {
         type: "password",
         temporary: false,
-        value: "mintee"
+        value: `${stats.password}`
   }
 ]}
 
   let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users`
 
-  await axios.post(url, JSON.stringify(data), config).catch(error => console.log(error))
-  
+  let response = await axios.post(url, JSON.stringify(data), config).catch(error => console.log("2"))
+  return {response, token, stats}
+}
+
+async function getByEmail(token, email, body) {
+
+  let config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  }
+
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users?search=${email}`
+
+  let res = await axios.get(url, config).catch(error => console.log("5"))
+
+  let info = {
+    "res": res,
+    "token": token
+  }
+
+  return {token, info, body}
+}
+
+async function changePassword(token, id, password) {
+  let config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  }
+
+  let data = {
+        type: "password",
+        temporary: false,
+        value: password
+  }
+
+  let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users/${id}/reset-password`
+
+  let res = await axios.put(url, JSON.stringify(data), config).catch(error => console.log("4"))
+
+  return res
 }
 
 module.exports = router;
