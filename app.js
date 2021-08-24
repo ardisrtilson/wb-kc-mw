@@ -8,6 +8,8 @@ var usersRouter = require('./routes/users');
 var decryptRouter = require('./routes/decrypt');
 var passwordRouter = require('./routes/password');
 var nameRouter = require('./routes/name');
+var attributeRouter = require('./routes/attributes');
+var userInfoRouter = require('./routes/userInfo');
 var cors = require('cors')
 var app = express();
 
@@ -27,6 +29,8 @@ app.use('/users', usersRouter);
 app.use('/decrypt', decryptRouter);
 app.use('/password', passwordRouter);
 app.use('/name', nameRouter);
+app.use('/userInfo', userInfoRouter);
+app.use('/attribute', attributeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
