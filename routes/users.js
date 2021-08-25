@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios')
 const qs = require('qs');
+const { body, validationResult } = require('express-validator');
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -9,7 +10,7 @@ router.use(express.json());
 router.post('/', function requestHandler(req, res) {
   getToken().then(response => createUser(response, req.body))
   .then(response => getByEmail(response.token.data.access_token, response.stats.email, response.stats))
-  .then(response => changePassword(response.token, response.info.res.data.id, response.body.password))
+  .then(response => changePassword(response.token, response.info.res.data[0].id, response.body.password))
   res.send(req.body)
 });
 
@@ -34,6 +35,8 @@ async function getToken() {
 }
 
 async function createUser(token, stats) {
+
+  console.log(body(stats.password).isLength({ min: 5 }))
 
   let config = {
     headers: {
@@ -74,6 +77,7 @@ async function getByEmail(token, email, body) {
 
   let res = await axios.get(url, config).catch(error => console.log("5"))
 
+  console.log(res.data[0].id)
   let info = {
     "res": res,
     "token": token
