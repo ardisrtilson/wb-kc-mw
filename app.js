@@ -1,36 +1,42 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+// router enigne setup
+
+
 var cookieParser = require('cookie-parser');
+var express = require('express');
 var logger = require('morgan');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var decryptRouter = require('./routes/decrypt');
-var passwordRouter = require('./routes/password');
-var nameRouter = require('./routes/name');
-var attributeRouter = require('./routes/attributes');
-var userInfoRouter = require('./routes/userInfo');
 var cors = require('cors')
 var app = express();
 
-// view engine setup
-app.use(cors())
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+var createError = require('http-errors');
+var path = require('path');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(logger('dev'));
+app.use(cors())
+
+// import routes
+
+var createUserRouter = require('./routes/createUser');
+var getUserInfoRouter = require('./routes/getUserInfo');
+var updateUserInfoRouter = require('./routes/updateUserInfo');
+var changePasswordRouter = require('./routes/changePassword');
+var exampleDecodeRouter = require('./routes/exampleDecode');
+var indexRouter = require('./routes/index');
+
+// define endpoints
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/decrypt', decryptRouter);
-app.use('/password', passwordRouter);
-app.use('/name', nameRouter);
-app.use('/userInfo', userInfoRouter);
-app.use('/attribute', attributeRouter);
+app.use('/createUser', createUserRouter);
+app.use('/exampleDecode', exampleDecodeRouter);
+app.use('/changePassword', changePasswordRouter);
+app.use('/getUserInfo', getUserInfoRouter);
+app.use('/updateUserInfo', updateUserInfoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
