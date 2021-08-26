@@ -9,9 +9,9 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 router.get('/', function requestHandler(req, res) {
-  res.send(req.body)
-  getUserToken.getUserToken()
+  getUserToken.getUserToken(req.body)
   .then(res => getUserInfo.getUserInfo(res, req.body))
+  res.send(req.body)
 });
 
 module.exports = router;

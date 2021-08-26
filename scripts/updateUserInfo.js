@@ -11,7 +11,7 @@ async function updateUserInfo(token, id, name) {
   }
 
   let data = {
-    firstName: name.firstName,
+    firstName: name.firstName
   }
 
   let url = `https://keycloak-service-dot-tj-node-server-322619.ue.r.appspot.com/auth/admin/realms/workbay/users/${id}`
